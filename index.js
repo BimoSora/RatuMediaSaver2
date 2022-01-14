@@ -42,27 +42,15 @@ bot.hears(new RegExp(`^[${bot.prefix}](url) (https?:\/\/.*)`,""),async (ctx) => 
     } catch (e) {
         console.error(e);
     }
-    if (mime.startsWith('video')) {
+    const allowedFileFormats = ['mp4', 'mp3', 'rar', '7z', 'zip', 'png', 'jpeg', 'jpg', 'gif']
+    if (allowedFileFormats.includes(ext)) {
         await ctx.telegram.sendDocument(ctx.chat.id,buffer,{
           fileName : filename2
-        }, {
         })
         await ctx.telegram.sendMessage(ctx.chat.id,'Upload successful')
-    } else if (mime.startsWith('image')) {
-        await ctx.telegram.sendDocument(ctx.chat.id,buffer,{
-          fileName : filename2
-        }, {
-        })
-        await ctx.telegram.sendMessage(ctx.chat.id,'Upload successful')
-    } else if (mime.startsWith('application')) {
-        await ctx.telegram.sendDocument(ctx.chat.id,buffer,{
-          fileName : filename2
-        }, {
-        })
-        await ctx.telegram.sendMessage(ctx.chat.id,'Upload successful')
-    } else {
-        await ctx.telegram.sendMessage(ctx.chat.id,'File type not allowed')
-    }
+     } else {
+        ctx.reply('File type not allowed')
+     }
   }
 })
 
