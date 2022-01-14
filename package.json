@@ -1,0 +1,21 @@
+{
+  "name": "ratumediasaver",
+  "version": "1.0.0",
+  "description": "another way to share files",
+  "main": "index.js",
+  "dependencies": {
+    "dotenv": "^11.0.0",
+    "file-type": "16.5.3",
+    "got": "11.8.3",
+    "telegraf": "^4.5.2",
+    "tgsnake": "./tgsnake-dev-build.tgz"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "SoraHearts",
+  "license": "ISC",
+  "keywords": [],
+  "repository": "https://github.com/BimoSora/RatuMediaSaver"
+}
