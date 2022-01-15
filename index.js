@@ -1,7 +1,6 @@
 // index.js
 require('dotenv').config();
-const {Snake} = require("tgsnake") // mengimpor modul.
-const FileType = require('file-type');
+const {Snake} = require("tgsnake");
 const got = require('got');
 const config = require('./config.js');
 
@@ -29,32 +28,19 @@ function fromid(ctx){
 
 // bot.generateSession() // aktifkan ini untuk menghasilkan sesi dan nonaktifkan bot.run().
 
-bot.hears(new RegExp(`^[${bot.prefix}](url) (https?:\/\/.*)`,""),async (ctx) => {
-  const startTime = Date.now() // <-- see this
-  if(ctx.from.id == Number(config.ADMIN) || ctx.from.id == Number(config.ADMIN1) || ctx.from.id == Number(config.ADMIN2) || ctx.from.id == Number(config.ADMIN3) || ctx.from.id == Number(config.ADMIN4)){
-    const url = ctx.text.replace('/url', '').trim();
-    if (!url.length) return ctx.telegram.sendMessage(ctx.chat.id, 'No valid url found ')
-    await ctx.telegram.sendMessage(ctx.chat.id,'Upload start')
-    const buffer = await got(url).buffer()
-    const sizeFile = buffer.byteLength; // <-- see this
-    const { ext, mime } = await FileType.fromBuffer(buffer)
-    let filename2 = ``;
-    try {
-      filename2 = new URL(url).pathname.split('/').pop();
-    } catch (e) {
-        console.error(e);
-    }
-    const allowedFileFormats = ['mov', 'webp', 'm4v', 'avi, 'flv', 'mkv', 'webm', '3gp', 'mpeg', 'mp4', 'mp3', 'pdf', 'rar', '7z', 'zip', 'png', 'jpeg', 'jpg', 'gif']
-    if (allowedFileFormats.includes(ext)) {
-        await ctx.telegram.sendDocument(ctx.chat.id,buffer,{
-          fileName : filename2
-        })
-        const processTime = Date.now() - startTime; // <-- see this
-        await ctx.telegram.sendMessage(ctx.chat.id,`Upload successful.\nSize file: ${bytes(sizeFile)}\nProcess time: ${processTime}ms`) // <-- and this
-     } else {
-        ctx.reply('File type not allowed')
-     }
+bot.on('url', async ctx => {
+  const url = ctx.message.text.replace('/url', '').trim()
+  const buffer = await got(url).buffer()
+  let filename2 = ``;
+  try {
+    filename2 = new URL(url).pathname.split('/').pop();
+  } catch (e) {
+      console.error(e);
   }
+  await ctx.telegram.sendDocument(ctx.chat.id,buffer,{
+    fileName : filename2
+  })
+  await ctx.telegram.sendMessage(ctx.chat.id,`Upload successful.`);
 })
 
 bot.run()

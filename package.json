@@ -5,7 +5,6 @@
   "main": "index.js",
   "dependencies": {
     "dotenv": "^11.0.0",
-    "file-type": "16.5.3",
     "got": "11.8.3",
     "tgsnake": "./tgsnake-dev-build.tgz"
   },
