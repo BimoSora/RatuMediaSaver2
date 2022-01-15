@@ -28,15 +28,18 @@ function fromid(ctx){
 
 // bot.generateSession() // aktifkan ini untuk menghasilkan sesi dan nonaktifkan bot.run().
 
-bot.on('url', async ctx => {
-  const url = ctx.message.text.replace('/url', '').trim()
-  if (!url) return ctx.telegram.sendMessage(chatId, 'No valid url found')
-  const filename = url.split('/').pop()
-  const buffer = await got(url).buffer()
-  await ctx.telegram.sendDocument(ctx.chat.id,buffer,{
-    fileName : filename2
-  })
-  await ctx.telegram.sendMessage(ctx.chat.id,`Upload successful.`);
+bot.hears(new RegExp(`^[${bot.prefix}](url) (https?:\/\/.*)`,""),async (ctx) => {
+  if(ctx.from.id == Number(config.ADMIN) || ctx.from.id == Number(config.ADMIN1) || ctx.from.id == Number(config.ADMIN2) || ctx.from.id == Number(config.ADMIN3) || ctx.from.id == Number(config.ADMIN4)){
+    const url = ctx.text.replace('/url', '').trim()
+    if (!url) return ctx.telegram.sendMessage(chatId, 'No valid url found')
+    const filename = url.split('/').pop()
+    await ctx.telegram.sendMessage(ctx.chat.id,`Upload start!`)
+    const buffer = await got(url).buffer()
+    await ctx.telegram.sendDocument(ctx.chat.id,buffer,{
+      fileName : filename
+    })
+    await ctx.telegram.sendMessage(ctx.chat.id,`Upload successful`)
+  }
 })
 
 bot.run()
