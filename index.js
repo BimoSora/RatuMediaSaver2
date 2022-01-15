@@ -42,12 +42,13 @@ bot.hears(new RegExp(`^[${bot.prefix}](url) (https?:\/\/.*)`,""),async (ctx) => 
     } catch (e) {
         console.error(e);
     }
-    const allowedFileFormats = ['mp4', 'mp3', 'rar', '7z', 'zip', 'png', 'jpeg', 'jpg', 'gif']
+    const allowedFileFormats = ['mov', 'webp', 'm4v', 'avi, 'flv', 'mkv', 'webm', '3gp', 'mpeg', 'mp4', 'mp3', 'pdf', 'rar', '7z', 'zip', 'png', 'jpeg', 'jpg', 'gif']
     if (allowedFileFormats.includes(ext)) {
         await ctx.telegram.sendDocument(ctx.chat.id,buffer,{
           fileName : filename2
         })
-        await ctx.telegram.sendMessage(ctx.chat.id,'Upload successful')
+        const processTime = Date.now() - startTime; // <-- see this
+        await ctx.telegram.sendMessage(ctx.chat.id,`Upload successful.\nSize file: ${bytes(sizeFile)}\nProcess time: ${processTime}ms`) // <-- and this
      } else {
         ctx.reply('File type not allowed')
      }
