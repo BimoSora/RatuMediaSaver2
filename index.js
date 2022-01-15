@@ -30,6 +30,7 @@ function fromid(ctx){
 // bot.generateSession() // aktifkan ini untuk menghasilkan sesi dan nonaktifkan bot.run().
 
 bot.hears(new RegExp(`^[${bot.prefix}](url) (https?:\/\/.*)`,""),async (ctx) => {
+  const startTime = Date.now() // <-- see this
   if(ctx.from.id == Number(config.ADMIN) || ctx.from.id == Number(config.ADMIN1) || ctx.from.id == Number(config.ADMIN2) || ctx.from.id == Number(config.ADMIN3) || ctx.from.id == Number(config.ADMIN4)){
     const url = ctx.text.replace('/url', '').trim();
     if (!url.length) return ctx.telegram.sendMessage(ctx.chat.id, 'No valid url found ')
