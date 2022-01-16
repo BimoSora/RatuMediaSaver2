@@ -2,9 +2,8 @@
 require('dotenv').config();
 const {Snake} = require("tgsnake");
 const got = require('got');
-const config = require('./config.js');
-
 const youtubedl = require('youtube-dl-exec');
+const config = require('./config.js');
 
 const bot = new Snake({
   apiHash : `${config.apiHash}`,
