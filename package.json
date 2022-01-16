@@ -6,7 +6,9 @@
   "dependencies": {
     "dotenv": "^11.0.0",
     "got": "11.8.3",
-    "tgsnake": "./tgsnake-dev-build.tgz"
+    "tgsnake": "./tgsnake-dev-build.tgz",
+    "youtube-dl": "^3.5.0",
+    "youtube-dl-exec": "^2.0.2"
   },
   "scripts": {
     "start": "node index.js",
