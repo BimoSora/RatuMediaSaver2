@@ -91,11 +91,16 @@ bot.hears(new RegExp(`^[${bot.prefix}](url) (https?:\/\/.*)`,''),async (ctx) => 
 
       const filename = url.split('/').pop()
 
+      var exstension2 = filename;
+      var regex2 = /\.[A-Za-z0-9]+$/gm
+      var filename2 = exstension2.replace(regex2, '');
+
       var regex3 = /\.[A-Za-z0-9]+$/gm
       var doctext3 = filename.replace(regex3, '');
       var doctext4 = filename.replace(regex3, 'null');
 
   try{
+
         if(doctext3 == doctext4){
           await ctx.telegram.sendMessage(ctx.chat.id,`Exstension not found`,{ replyToMsgId: message_id , parse_mode: 'Markdown'})
         }else{
@@ -108,15 +113,15 @@ bot.hears(new RegExp(`^[${bot.prefix}](url) (https?:\/\/.*)`,''),async (ctx) => 
           .on('data', chunk => buffer.push(chunk))
           .on('end', async () => {
             await ctx.telegram.sendDocument(ctx.chat.id,Buffer.concat(buffer),{
-              fileName : filename
+              fileName : filename,
+              caption : filename2
             })
-            await ctx.telegram.sendMessage(ctx.chat.id,filename)
             await ctx.telegram.sendMessage(ctx.chat.id,`Upload successful`)
           })
         }
       }catch (error) {
         console.error(error);
-        ctx.telegram.sendMessage(ctx.chat.id,'***Error occurred, Make sure your sent a correct URL***',{ replyToMsgId: message_id , parse_mode: 'Markdown'})
+        await ctx.telegram.sendMessage(ctx.chat.id,'***Error occurred, Make sure your sent a correct URL***',{ replyToMsgId: message_id , parse_mode: 'Markdown'})
       }
     }
   }
