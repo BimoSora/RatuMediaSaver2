@@ -84,7 +84,7 @@ bot.hears(new RegExp(`^[${bot.prefix}](url) (https?:\/\/.*)`,''),async (ctx) => 
         })
       }catch (error) {
         console.error(error);
-        ctx.telegram.sendMessage(ctx.chat.id,'***Error occurred, Make sure your sent a correct URL***',{ replyToMsgId: message_id , parse_mode: 'Markdown'})
+        await ctx.telegram.sendMessage(ctx.chat.id,'***Error occurred, Make sure your sent a correct URL***',{ replyToMsgId: message_id , parse_mode: 'Markdown'})
       }
 
     }else{
@@ -99,25 +99,45 @@ bot.hears(new RegExp(`^[${bot.prefix}](url) (https?:\/\/.*)`,''),async (ctx) => 
       var doctext3 = filename.replace(regex3, '');
       var doctext4 = filename.replace(regex3, 'null');
 
+      const words = filename.split('.');
+      const words2 = words[1];
+
   try{
 
         if(doctext3 == doctext4){
           await ctx.telegram.sendMessage(ctx.chat.id,`Exstension not found`,{ replyToMsgId: message_id , parse_mode: 'Markdown'})
         }else{
-          await ctx.telegram.sendMessage(ctx.chat.id,'Processing your file',{ replyToMsgId: message_id , parse_mode: 'Markdown'})
-          const buffer = []
-          const stream = got.stream(url)
-          stream
-          .on('error', () => ctx.telegram.sendMessage(ctx.chat.id, 'An error has occurred'))
-          .on('progress', p => console.log(p))
-          .on('data', chunk => buffer.push(chunk))
-          .on('end', async () => {
-            await ctx.telegram.sendDocument(ctx.chat.id,Buffer.concat(buffer),{
-              fileName : filename,
-              caption : filename2
+          if(words2 == 'jpg' || words2 == 'jpeg' || words2 == 'png'){
+            await ctx.telegram.sendMessage(ctx.chat.id,'Processing your file',{ replyToMsgId: message_id , parse_mode: 'Markdown'})
+            const buffer = []
+            const stream = got.stream(url)
+            stream
+            .on('error', () => ctx.telegram.sendMessage(ctx.chat.id, 'An error has occurred'))
+            .on('progress', p => console.log(p))
+            .on('data', chunk => buffer.push(chunk))
+            .on('end', async () => {
+              await ctx.telegram.sendPhoto(ctx.chat.id,Buffer.concat(buffer),{
+                fileName : filename,
+                caption : filename2
+              })
+              await ctx.telegram.sendMessage(ctx.chat.id,`Upload successful`)
             })
-            await ctx.telegram.sendMessage(ctx.chat.id,`Upload successful`)
-          })
+          }else{
+            await ctx.telegram.sendMessage(ctx.chat.id,'Processing your file',{ replyToMsgId: message_id , parse_mode: 'Markdown'})
+            const buffer = []
+            const stream = got.stream(url)
+            stream
+            .on('error', () => ctx.telegram.sendMessage(ctx.chat.id, 'An error has occurred'))
+            .on('progress', p => console.log(p))
+            .on('data', chunk => buffer.push(chunk))
+            .on('end', async () => {
+              await ctx.telegram.sendDocument(ctx.chat.id,Buffer.concat(buffer),{
+                fileName : filename,
+                caption : filename2
+              })
+              await ctx.telegram.sendMessage(ctx.chat.id,`Upload successful`)
+            })
+          }
         }
       }catch (error) {
         console.error(error);
