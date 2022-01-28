@@ -99,15 +99,14 @@ bot.hears(new RegExp(`^[${bot.prefix}](url) (https?:\/\/.*)`,''),async (ctx) => 
       var doctext3 = filename.replace(regex3, '');
       var doctext4 = filename.replace(regex3, 'null');
 
-      const words = filename.split('.');
-      const words2 = words[1];
+      const words = filename.split('.').pop()
 
   try{
 
         if(doctext3 == doctext4){
           await ctx.telegram.sendMessage(ctx.chat.id,`Exstension not found`,{ replyToMsgId: message_id , parse_mode: 'Markdown'})
         }else{
-          if(words2 == 'jpg' || words2 == 'jpeg' || words2 == 'png'){
+          if(words == 'jpg' || words == 'jpeg' || words == 'png'){
             await ctx.telegram.sendMessage(ctx.chat.id,'Processing your file',{ replyToMsgId: message_id , parse_mode: 'Markdown'})
             const buffer = []
             const stream = got.stream(url)
